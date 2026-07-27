@@ -32,11 +32,22 @@
     "README.md"
   ],
   "sideEffects": false,
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wangbin3162/thinking-orbs-universal.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "build:demo": "vite build --config vite.config.demo.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "release:prepare": "node --experimental-strip-types build/release.ts prepare",
+    "release:version": "node --experimental-strip-types build/release.ts version",
+    "release:publish": "node --experimental-strip-types build/release.ts manual-publish",
+    "release:ci": "node --experimental-strip-types build/release.ts ci"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
