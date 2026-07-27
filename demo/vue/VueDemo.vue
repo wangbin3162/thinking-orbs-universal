@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import ThinkingOrb from '../../src/vue/ThinkingOrb.vue';
 import type { OrbState } from '../../src/types';
 import { ORB_LABELS } from '../../src/types';
+import { highlightCode } from '../highlight';
 
 const props = withDefaults(
   defineProps<{
@@ -40,6 +41,8 @@ import { ThinkingOrb } from 'thinking-orbs-universal/vue';
 import 'thinking-orbs-universal/demo/styles.css';
 <\/script>`;
 });
+
+const highlightedCode = computed(() => highlightCode(codeSnippet.value, 'xml'));
 </script>
 
 <template>
@@ -80,7 +83,7 @@ import 'thinking-orbs-universal/demo/styles.css';
         <span>Vue 3 Usage Code Snippet</span>
         <span>Vue SFC</span>
       </div>
-      <pre class="code-content">{{ codeSnippet }}</pre>
+      <pre class="code-content hljs language-xml" v-html="highlightedCode"></pre>
     </div>
   </div>
 </template>

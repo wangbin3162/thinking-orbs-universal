@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { mountOrb, registerThinkingOrbElement } from '../../src';
 import type { OrbState } from '../../src/types';
 import { ORB_LABELS } from '../../src/types';
+import { highlightCode } from '../highlight';
 
 // Register the Web Component
 registerThinkingOrbElement();
@@ -87,7 +88,7 @@ export function renderVanillaDemo(container: HTMLElement, options: VanillaDemoOp
       <span>方式一：原生 Web Component 标签 (&lt;thinking-orb&gt;)</span>
       <span>HTML / JS</span>
     </div>
-    <pre class="code-content">// 1. 引入 Web Component 自动注册包及样式
+    <pre class="code-content hljs language-xml" data-lang="xml">// 1. 引入 Web Component 自动注册包及样式
 import 'thinking-orbs-universal/web-component';
 import 'thinking-orbs-universal/demo/styles.css';
 
@@ -114,7 +115,7 @@ orb.setAttribute('speed', '${speed}');       // 改变速度</pre>
       <span>方式二：Vanilla JS API 函数 (mountOrb)</span>
       <span>JavaScript</span>
     </div>
-    <pre class="code-content">// 1. 引入 mountOrb 函数与样式
+    <pre class="code-content hljs language-javascript" data-lang="javascript">// 1. 引入 mountOrb 函数与样式
 import { mountOrb } from 'thinking-orbs-universal';
 import 'thinking-orbs-universal/demo/styles.css';
 
@@ -141,6 +142,12 @@ orbInstance.updateOptions({ state: 'solving' });
 // orbInstance.destroy(); // 销毁实例</pre>
   `;
   section.appendChild(codeBoxMount);
+
+  // 语法高亮所有代码块（读取原始文本再替换为高亮 HTML）
+  section.querySelectorAll('pre.code-content').forEach((pre) => {
+    const lang = pre.getAttribute('data-lang') === 'javascript' ? 'javascript' : 'xml';
+    pre.innerHTML = highlightCode(pre.textContent || '', lang);
+  });
 
   container.appendChild(section);
 }

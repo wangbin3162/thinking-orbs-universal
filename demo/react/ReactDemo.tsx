@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ThinkingOrb } from '../../src/react';
 import type { OrbState } from '../../src/types';
 import { ORB_LABELS } from '../../src/types';
+import { highlightCode } from '../highlight';
 
 const ORB_STATES: OrbState[] = ['working', 'searching', 'solving', 'listening', 'composing', 'shaping'];
 
@@ -70,7 +71,10 @@ export function ReactAIStatus() {
           <span>React Usage Code Snippet</span>
           <span>JSX / TSX</span>
         </div>
-        <pre className="code-content">{codeSnippet}</pre>
+        <pre
+          className="code-content hljs language-javascript"
+          dangerouslySetInnerHTML={{ __html: highlightCode(codeSnippet, 'javascript') }}
+        />
       </div>
     </div>
   );

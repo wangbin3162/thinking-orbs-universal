@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ReactDemo } from './react';
 import VueWrapper from './vue/VueWrapper';
 import { VanillaDemo } from './vanilla';
+import { initHljsTheme } from './highlight';
 
 type FrameworkTab = 'react' | 'vue' | 'vanilla' | 'all';
 
@@ -14,6 +15,7 @@ export function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    initHljsTheme(theme);
   }, [theme]);
 
   const toggleTheme = () => {
@@ -66,19 +68,19 @@ export function App() {
             🌐 All Demos
           </button>
           <button
-            className={`tab-btn ${activeTab === 'react' ? 'active' : ''}`}
+            className={`tab-btn fw-react ${activeTab === 'react' ? 'active' : ''}`}
             onClick={() => setActiveTab('react')}
           >
             ⚛️ React Demo
           </button>
           <button
-            className={`tab-btn ${activeTab === 'vue' ? 'active' : ''}`}
+            className={`tab-btn fw-vue ${activeTab === 'vue' ? 'active' : ''}`}
             onClick={() => setActiveTab('vue')}
           >
             🟢 Vue 3 Demo
           </button>
           <button
-            className={`tab-btn ${activeTab === 'vanilla' ? 'active' : ''}`}
+            className={`tab-btn fw-vanilla ${activeTab === 'vanilla' ? 'active' : ''}`}
             onClick={() => setActiveTab('vanilla')}
           >
             ⚡ Vanilla JS API Demo
@@ -89,19 +91,19 @@ export function App() {
       {/* Main Content Area */}
       <main>
         {(activeTab === 'all' || activeTab === 'react') && (
-          <section style={{ marginBottom: '2.5rem' }}>
+          <section className="demo-fw-react" style={{ marginBottom: '2.5rem' }}>
             <ReactDemo speed={speed} paused={paused} isSmall={isSmall} />
           </section>
         )}
 
         {(activeTab === 'all' || activeTab === 'vue') && (
-          <section style={{ marginBottom: '2.5rem' }}>
+          <section className="demo-fw-vue" style={{ marginBottom: '2.5rem' }}>
             <VueWrapper speed={speed} paused={paused} isSmall={isSmall} />
           </section>
         )}
 
         {(activeTab === 'all' || activeTab === 'vanilla') && (
-          <section style={{ marginBottom: '2.5rem' }}>
+          <section className="demo-fw-vanilla" style={{ marginBottom: '2.5rem' }}>
             <VanillaDemo speed={speed} paused={paused} isSmall={isSmall} />
           </section>
         )}

@@ -329,8 +329,8 @@ body {
   letter-spacing: 0.08em;
   padding: 0.2rem 0.5rem;
   border-radius: 6px;
-  background: rgba(99, 102, 241, 0.15);
-  color: var(--accent-light);
+  background: var(--fw-accent-soft, rgba(99, 102, 241, 0.15));
+  color: var(--fw-accent, var(--accent-light));
 }
 
 /* Code Snippet Box */
@@ -358,8 +358,8 @@ body {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: 0.85rem;
   line-height: 1.6;
-  color: var(--text-main);
   white-space: pre;
+  border-radius: 8px;
 }
 
 /* Section Title */
@@ -371,4 +371,60 @@ body {
   align-items: center;
   gap: 0.6rem;
   color: var(--text-main);
+}
+
+/* Framework accent color bar preceding the section title */
+.section-title::before {
+  content: '';
+  width: 4px;
+  height: 1.1em;
+  flex-shrink: 0;
+  border-radius: 2px;
+  background: var(--fw-accent, var(--accent));
+}
+
+/* =========================================================
+   FRAMEWORK ACCENT COLORS
+   Each demo section carries a framework class that sets
+   --fw-accent / --fw-accent-soft locally, so badges, the
+   title color bar, and the active tab pick up the framework
+   brand color without touching the orb engine palette.
+   ========================================================= */
+.demo-fw-react {
+  --fw-accent: #61dafb;
+  --fw-accent-soft: rgba(97, 218, 251, 0.15);
+  --fw-accent-shadow: rgba(97, 218, 251, 0.35);
+}
+
+.demo-fw-vue {
+  --fw-accent: #42b883;
+  --fw-accent-soft: rgba(66, 184, 131, 0.15);
+  --fw-accent-shadow: rgba(66, 184, 131, 0.35);
+}
+
+.demo-fw-vanilla {
+  --fw-accent: #f59e0b;
+  --fw-accent-soft: rgba(245, 158, 11, 0.15);
+  --fw-accent-shadow: rgba(245, 158, 11, 0.35);
+}
+
+/* Active tab takes the framework brand color so switching
+   tabs gives an immediate color cue. "All Demos" keeps the
+   default indigo. */
+.tab-btn.active.fw-react {
+  background: #61dafb;
+  color: #0b0f19;
+  box-shadow: 0 4px 12px rgba(97, 218, 251, 0.35);
+}
+
+.tab-btn.active.fw-vue {
+  background: #42b883;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(66, 184, 131, 0.35);
+}
+
+.tab-btn.active.fw-vanilla {
+  background: #f59e0b;
+  color: #0b0f19;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
 }
