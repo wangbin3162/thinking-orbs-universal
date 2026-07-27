@@ -1,6 +1,6 @@
 {
   "name": "thinking-orbs-universal",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Framework-agnostic dotted thought-orb loading indicators for AI & agent UIs — with Vue 3, React, Web Components, and Vanilla JS support.",
   "type": "module",
   "main": "./dist/index.cjs",
