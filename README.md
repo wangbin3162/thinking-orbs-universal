@@ -113,6 +113,37 @@ Strictly monochrome — light ink for dark backgrounds, dark ink for light backg
 2. otherwise `prefers-color-scheme`, subscribed for live OS theme switches;
 3. SSR-safe — the canvas paints only on the client, after the theme has resolved.
 
+## Text Shimmer (文字流光)
+
+A lightweight, framework-agnostic "shining text" utility for the status label next to the orb. The styles ship as a standalone CSS file — no framework import required.
+
+```css
+/* JS / TSX / any bundler */
+import 'thinking-orbs-universal/shimmer.css';
+```
+
+```html
+<span class="t-shimmer" data-text="Searching…">Searching…</span>
+```
+
+`data-text` must equal the visible text — it is used by the `::before` layer that renders the moving highlight. Add the `.sm` class for the inline (size `20`) variant:
+
+```html
+<span class="t-shimmer sm" data-text="Working…">Working…</span>
+```
+
+The effect reads its tokens from CSS custom properties, so you can tune it from your own theme without re-importing:
+
+| Variable             | Description                       | Default           |
+| -------------------- | --------------------------------- | ----------------- |
+| `--shimmer-dur`      | Animation duration                | `2000ms`          |
+| `--shimmer-band`     | Gradient band width               | `400%`            |
+| `--shimmer-ease`     | Animation easing                  | `linear`          |
+| `--shimmer-base`     | Resting text color                | light/dark-aware  |
+| `--shimmer-highlight`| Sweeping highlight color          | light/dark-aware  |
+
+The base and highlight colors follow the `data-theme="light"` / `dark` convention automatically, and the animation is disabled under `prefers-reduced-motion: reduce`.
+
 ## CSS custom properties
 
 Drive size, speed, and the two ink colors from CSS instead of props — ideal for theme files and design tokens. Resolved off the element or any ancestor, in real time.
@@ -133,6 +164,8 @@ thinking-orb {
   --orb-color-dark: #e6e6e6;
 }
 ```
+
+The color variables are fully live: `--orb-color-dark` paints the dots when the resolved theme is dark, `--orb-color-light` when it is light. Any CSS color is accepted (`#hex`, `rgb()`/`rgba()`). Each dot renders as that color scaled by its brightness — the brightest dots hold the full hue, deeper dots fall toward black — so you get a custom-tinted orb that keeps its 3D depth. Omit both and the classic grayscale ink is used.
 
 ## Other props
 
@@ -181,6 +214,47 @@ npm run dev      # vite demo playground
 npm run build    # library build (dist/)
 npm run typecheck
 ```
+
+## 如何修改颜色
+
+> 开始前先安装本包：`npm i thinking-orbs-universal`（安装方式见上方 [Install](#install)）。下面两种颜色都可直接在你的样式里覆盖，无需改源码。
+
+### 修改文字流光颜色
+
+文字流光（`.t-shimmer`）的颜色由 CSS 自定义属性控制，直接在你自己的样式里覆盖即可，无需改源码。所有变量都可选，不设就用默认值。
+
+```css
+/* 在项目引入流光样式之后覆盖 */
+.t-shimmer {
+  --shimmer-dur: 1500ms;         /* 扫光动画时长 */
+  --shimmer-base: #c7d2fe;       /* 静止时文字的颜色 */
+  --shimmer-highlight: #ffffff;  /* 扫过时最亮的高光颜色 */
+}
+```
+
+- 只改文字颜色：覆盖 `--shimmer-base`。
+- 想调亮高光的扫光颜色：覆盖 `--shimmer-highlight`。
+- 默认值会自动跟随深浅主题（`data-theme="dark|light"`），一般无需手动指定。
+- 记得先引入样式文件：`import 'thinking-orbs-universal/shimmer.css';`，否则 `.t-shimmer` 类不存在，改动不生效。
+
+### 修改小球颜色
+
+小球（`thinking-orb`）的颜色通过两个 CSS 自定义属性设置，按主题分别生效：
+
+```css
+thinking-orb {
+  --orb-color-dark: #6366f1;   /* 深色背景下小球的颜色，如靛蓝 */
+  --orb-color-light: #4f46e5;  /* 浅色背景下小球的颜色 */
+}
+```
+
+- 支持任意 CSS 颜色格式：`#hex`、`rgb()` / `rgba()`。
+- 深色背景用 `--orb-color-dark`，浅色背景用 `--orb-color-light`，不设则回退为经典黑白灰。
+- 每个小点按亮度缩放该颜色：最亮的点保持纯色，越远越偏黑，因此着色后仍保留立体感。
+- 也可通过 inline style 针对单个实例覆盖，例如：
+  ```html
+  <thinking-orb state="searching" style="--orb-color-dark:#61dafb"></thinking-orb>
+  ```
 
 ## License
 

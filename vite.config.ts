@@ -1,8 +1,24 @@
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
-import { resolve } from 'path';
+import { copyFile, mkdir } from 'node:fs/promises';
+import { dirname, resolve } from 'path';
+
+// 打包时把 src/shimmer.css 原样复制到 dist/shimmer.css，
+// 供使用者通过 import 'thinking-orbs-universal/shimmer.css' 引入文字流光样式。
+function copyShimmerCss(): Plugin {
+  return {
+    name: 'copy-shimmer-css',
+    apply: 'build',
+    async closeBundle() {
+      const src = resolve(__dirname, 'src/shimmer.css');
+      const dest = resolve(__dirname, 'dist/shimmer.css');
+      await mkdir(dirname(dest), { recursive: true });
+      await copyFile(src, dest);
+    },
+  };
+}
 
 export default defineConfig({
   plugins: [
@@ -12,6 +28,7 @@ export default defineConfig({
       include: ['src'],
       insertTypesEntry: true,
     }),
+    copyShimmerCss(),
   ],
   build: {
     lib: {

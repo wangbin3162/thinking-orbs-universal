@@ -1,4 +1,5 @@
 import { MODE_DRAWS } from '../engine/registry';
+import { parseColor } from '../engine/core';
 import { resolvePreset } from '../presets';
 import type { OrbOptions } from '../types';
 import { DEFAULT_ORB_OPTIONS, ORB_LABELS } from '../types';
@@ -116,11 +117,13 @@ export class OrbController {
     const { mode, opts } = resolvePreset(this.options.state, size);
     const draw = MODE_DRAWS[mode] || MODE_DRAWS.orbits;
     const isDark = this.themeObserver ? this.themeObserver.getResolvedDark() : true;
+    // Pick the ink color for the resolved theme; parseColor ignores garbage.
+    const color = isDark ? parseColor(cssVars.colorDark ?? '') : parseColor(cssVars.colorLight ?? '');
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, size, size);
     const safeT = Number.isFinite(tSec) ? tSec : 0;
-    draw(ctx, size, safeT, isDark, opts);
+    draw(ctx, size, safeT, isDark, opts, color);
   }
 
   private renderCurrentFrame(): void {

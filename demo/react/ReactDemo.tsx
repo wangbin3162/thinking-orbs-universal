@@ -15,8 +15,12 @@ export interface DemoControlsProps {
 export function ReactDemo({ speed, paused, isSmall }: DemoControlsProps) {
   const [selectedState, setSelectedState] = useState<OrbState>('working');
 
-  const codeSnippet = `import { ThinkingOrb } from 'thinking-orbs-universal/react';
-import 'thinking-orbs-universal/demo/styles.css';
+  const codeSnippet = `// 安装
+// npm i thinking-orbs-universal
+// (react / react-dom 为可选 peer 依赖)
+
+import { ThinkingOrb } from 'thinking-orbs-universal/react';
+import 'thinking-orbs-universal/shimmer.css';
 
 export function ReactAIStatus() {
   return (
@@ -27,7 +31,20 @@ export function ReactAIStatus() {
       </span>
     </div>
   );
-}`;
+}
+
+// ── 修改颜色 ──────────────────────────────
+// 1. 文字流光颜色：覆盖 .t-shimmer 上的 --shimmer-* 变量
+//    .t-shimmer {
+//      --shimmer-base: #c7d2fe;       /* 静止文字颜色 */
+//      --shimmer-highlight: #ffffff;  /* 扫光高光颜色 */
+//    }
+//
+// 2. 小球颜色：覆盖 thinking-orb 上的 --orb-color-* 变量
+//    thinking-orb {
+//      --orb-color-dark: #6366f1;   /* 深色背景小球颜色 */
+//      --orb-color-light: #4f46e5;  /* 浅色背景小球颜色 */
+//    }`;
 
   return (
     <div className="demo-section">

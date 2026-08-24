@@ -2,7 +2,7 @@
 
 import type { ModeOpts } from './profiles';
 
-export type { Dot } from './core';
+export type { Dot, RgbColor } from './core';
 
 /** One frame painter: draws a mode into a 2D context at CSS-px `size`. */
 export type ModeDraw = (
@@ -10,5 +10,7 @@ export type ModeDraw = (
   size: number,
   t: number,
   dark: boolean,
-  opts: ModeOpts
+  opts: ModeOpts,
+  /** Optional dot color; when omitted the mode falls back to grayscale. */
+  color?: import('./core').RgbColor | null
 ) => void;

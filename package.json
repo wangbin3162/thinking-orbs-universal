@@ -1,6 +1,6 @@
 {
   "name": "thinking-orbs-universal",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Framework-agnostic dotted thought-orb loading indicators for AI & agent UIs — with Vue 3, React, Web Components, and Vanilla JS support.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -25,13 +25,18 @@
       "types": "./dist/web-component/index.d.ts",
       "import": "./dist/web-component/index.js"
     },
+    "./shimmer.css": "./dist/shimmer.css",
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
     "README.md"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css",
+    "./shimmer.css",
+    "./dist/shimmer.css"
+  ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },

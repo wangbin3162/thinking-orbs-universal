@@ -88,9 +88,12 @@ export function renderVanillaDemo(container: HTMLElement, options: VanillaDemoOp
       <span>方式一：原生 Web Component 标签 (&lt;thinking-orb&gt;)</span>
       <span>HTML / JS</span>
     </div>
-    <pre class="code-content hljs language-xml" data-lang="xml">// 1. 引入 Web Component 自动注册包及样式
+    <pre class="code-content hljs language-xml" data-lang="xml">// 0. 安装
+// npm i thinking-orbs-universal
+
+// 1. 引入 Web Component 自动注册包及样式
 import 'thinking-orbs-universal/web-component';
-import 'thinking-orbs-universal/demo/styles.css';
+import 'thinking-orbs-universal/shimmer.css';
 
 // 2. 直接在 HTML 中静态书写标签（无需 JS 动态创建）：
 /*
@@ -103,7 +106,19 @@ import 'thinking-orbs-universal/demo/styles.css';
 // 3. 也可用原生 JS 动态操控属性：
 const orb = document.querySelector('thinking-orb');
 orb.setAttribute('state', 'searching'); // 切换动画
-orb.setAttribute('speed', '${speed}');       // 改变速度</pre>
+orb.setAttribute('speed', '${speed}');       // 改变速度
+
+// ── 修改颜色 ──────────────────────────────
+// 文字流光颜色：覆盖 .t-shimmer 上的 --shimmer-* 变量
+// .t-shimmer {
+//   --shimmer-base: #c7d2fe;       /* 静止文字颜色 */
+//   --shimmer-highlight: #ffffff;  /* 扫光高光颜色 */
+// }
+// 小球颜色：覆盖 thinking-orb 上的 --orb-color-* 变量
+// thinking-orb {
+//   --orb-color-dark: #6366f1;   /* 深色背景小球颜色 */
+//   --orb-color-light: #4f46e5;  /* 浅色背景小球颜色 */
+// }</pre>
   `;
   section.appendChild(codeBoxWebComp);
 
@@ -115,9 +130,12 @@ orb.setAttribute('speed', '${speed}');       // 改变速度</pre>
       <span>方式二：Vanilla JS API 函数 (mountOrb)</span>
       <span>JavaScript</span>
     </div>
-    <pre class="code-content hljs language-javascript" data-lang="javascript">// 1. 引入 mountOrb 函数与样式
+    <pre class="code-content hljs language-javascript" data-lang="javascript">// 0. 安装
+// npm i thinking-orbs-universal
+
+// 1. 引入 mountOrb 函数与样式
 import { mountOrb } from 'thinking-orbs-universal';
-import 'thinking-orbs-universal/demo/styles.css';
+import 'thinking-orbs-universal/shimmer.css';
 
 // 2. 创建容器并挂载 Orb
 const pill = document.createElement('div');
@@ -139,7 +157,19 @@ pill.appendChild(text);
 
 // 4. 动态更新属性或销毁：
 orbInstance.updateOptions({ state: 'solving' });
-// orbInstance.destroy(); // 销毁实例</pre>
+// orbInstance.destroy(); // 销毁实例
+
+// ── 修改颜色 ──────────────────────────────
+// 文字流光颜色：覆盖 .t-shimmer 上的 --shimmer-* 变量
+// .t-shimmer {
+//   --shimmer-base: #c7d2fe;       /* 静止文字颜色 */
+//   --shimmer-highlight: #ffffff;  /* 扫光高光颜色 */
+// }
+// 小球颜色：覆盖 thinking-orb 上的 --orb-color-* 变量
+// thinking-orb {
+//   --orb-color-dark: #6366f1;   /* 深色背景小球颜色 */
+//   --orb-color-light: #4f46e5;  /* 浅色背景小球颜色 */
+// }</pre>
   `;
   section.appendChild(codeBoxMount);
 

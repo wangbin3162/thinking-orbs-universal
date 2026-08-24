@@ -14,6 +14,13 @@ export interface Dot {
   a?: number;
 }
 
+/** An RGB color (0-255 per channel) for the orb dots. */
+export interface RgbColor {
+  r: number;
+  g: number;
+  b: number;
+}
+
 export type Projector = (x: number, y: number, z: number) => [number, number, number];
 
 /** Deterministic hash in [0, 1). */
@@ -52,22 +59,65 @@ export function makeProj(yaw: number, tilt: number, cx: number, cy: number, scal
 }
 
 /**
- * Painter: z-sort far→near, matte grayscale dots. On dark substrates the
- * ink value is mirrored (1 - white) so near dots read bright — the same
- * depth language on an inverted substrate.
+ * Painter: z-sort far→near, matte dots. On dark substrates the ink value
+ * is mirrored (1 - white) so near dots read bright — the same depth
+ * language on an inverted substrate.
+ *
+ * When a `color` is provided, each dot is rendered as that color scaled by
+ * its brightness (brightest dot = full color, darkest = black), keeping the
+ * existing depth shading while allowing a custom hue. Without a color the
+ * classic grayscale behavior is kept.
  */
-export function paint(ctx: CanvasRenderingContext2D, dots: Dot[], dark: boolean, rMin = 0.3): void {
+export function paint(
+  ctx: CanvasRenderingContext2D,
+  dots: Dot[],
+  dark: boolean,
+  rMin = 0.3,
+  color?: RgbColor | null
+): void {
   dots.sort((a, b) => a.z - b.z);
   for (const d of dots) {
     const alpha = d.a ?? 1;
     if (alpha < 0.02) continue;
     const w = Math.min(1, Math.max(0, d.white));
-    const g = Math.round((dark ? 1 - w : w) * 255);
-    ctx.fillStyle = `rgba(${g},${g},${g},${alpha})`;
+    const brightness = dark ? 1 - w : w;
+    if (color) {
+      const r = Math.round(color.r * brightness);
+      const g = Math.round(color.g * brightness);
+      const b = Math.round(color.b * brightness);
+      ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+    } else {
+      const g = Math.round(brightness * 255);
+      ctx.fillStyle = `rgba(${g},${g},${g},${alpha})`;
+    }
     ctx.beginPath();
     ctx.arc(d.x, d.y, Math.max(rMin, d.r), 0, Math.PI * 2);
     ctx.fill();
   }
+}
+
+/** Parses a CSS color string (`#rgb`, `#rrggbb`, `rgb()`/`rgba()`) to RGB. Returns null when unparseable. */
+export function parseColor(value: string): RgbColor | null {
+  const v = value.trim();
+  const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(v);
+  if (hex) {
+    const h = hex[1];
+    const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+    return {
+      r: parseInt(full.slice(0, 2), 16),
+      g: parseInt(full.slice(2, 4), 16),
+      b: parseInt(full.slice(4, 6), 16),
+    };
+  }
+  const rgb = /^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/i.exec(v);
+  if (rgb) {
+    return {
+      r: Math.round(parseFloat(rgb[1])),
+      g: Math.round(parseFloat(rgb[2])),
+      b: Math.round(parseFloat(rgb[3])),
+    };
+  }
+  return null;
 }
 
 /**

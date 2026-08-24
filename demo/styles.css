@@ -1,4 +1,7 @@
 /* Demo Global Styles & Design System */
+/* Text Shimmer (t-shimmer) styles come from the shared source used
+   by the published package, so the demo and dist stay in sync. */
+@import '../src/shimmer.css';
 
 :root {
   --bg-color: #0b0f19;
@@ -17,12 +20,8 @@
   --pill-fill: rgba(29, 29, 29, 0.55);
   --pill-stroke: inset 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 0 50px 0 rgba(255, 255, 255, 0.012);
 
-  /* Text Shimmer Effect variables */
-  --shimmer-dur: 2000ms;
-  --shimmer-band: 400%;
-  --shimmer-ease: linear;
-  --shimmer-base: rgba(251, 251, 251, 0.55);
-  --shimmer-highlight: #ffffff;
+  /* Range slider track fill */
+  --slider-track: rgba(255, 255, 255, 0.15);
 }
 
 html[data-theme="light"],
@@ -43,9 +42,8 @@ html[data-theme="light"],
   --pill-fill: rgba(255, 255, 255, 0.75);
   --pill-stroke: 0 1px 3px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.08);
 
-  /* Text Shimmer for Light Mode */
-  --shimmer-base: rgba(15, 23, 42, 0.5);
-  --shimmer-highlight: #0f172a;
+  /* Range slider track fill for Light Mode */
+  --slider-track: rgba(0, 0, 0, 0.15);
 }
 
 * {
@@ -199,7 +197,7 @@ body {
   width: 140px;
   height: 6px;
   border-radius: 3px;
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--slider-track);
   outline: none;
 }
 .slider-input::-webkit-slider-thumb {
@@ -211,57 +209,6 @@ body {
   background: var(--accent);
   cursor: pointer;
   box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
-}
-
-/* =========================================================
-   TEXT SHIMMER EFFECT (.t-shimmer) - Core requested feature
-   ========================================================= */
-.t-shimmer {
-  position: relative;
-  display: inline-block;
-  color: var(--shimmer-base);
-  font-size: 1.05rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: 1.4;
-  white-space: nowrap;
-}
-
-.t-shimmer.sm {
-  font-size: 0.85rem;
-}
-
-.t-shimmer::before {
-  content: attr(data-text);
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image: linear-gradient(
-    90deg,
-    transparent          0%,
-    transparent         40%,
-    var(--shimmer-highlight) 50%,
-    transparent         60%,
-    transparent        100%
-  );
-  background-size: var(--shimmer-band) 100%;
-  background-repeat: no-repeat;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  animation: t-shimmer var(--shimmer-dur) var(--shimmer-ease) infinite;
-}
-
-@keyframes t-shimmer {
-  0%   { background-position: 100% 0; }
-  100% { background-position: 0% 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .t-shimmer::before {
-    animation: none !important;
-  }
 }
 
 /* =========================================================

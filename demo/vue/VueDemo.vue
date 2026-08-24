@@ -37,9 +37,27 @@ const codeSnippet = computed(() => {
 </template>
 
 <script setup>
+// 安装
+// npm i thinking-orbs-universal
+// (vue 为可选 peer 依赖)
 import { ThinkingOrb } from 'thinking-orbs-universal/vue';
-import 'thinking-orbs-universal/demo/styles.css';
-<\/script>`;
+import 'thinking-orbs-universal/shimmer.css';
+<\/script>
+
+<style scoped>
+/* 修改颜色 */
+/* 1. 文字流光颜色：覆盖 .t-shimmer 上的 --shimmer-* 变量 */
+.t-shimmer {
+  --shimmer-base: #c7d2fe;       /* 静止文字颜色 */
+  --shimmer-highlight: #ffffff;  /* 扫光高光颜色 */
+}
+
+/* 2. 小球颜色：覆盖 thinking-orb 上的 --orb-color-* 变量 */
+thinking-orb {
+  --orb-color-dark: #6366f1;   /* 深色背景小球颜色 */
+  --orb-color-light: #4f46e5;  /* 浅色背景小球颜色 */
+}
+</style>`;
 });
 
 const highlightedCode = computed(() => highlightCode(codeSnippet.value, 'xml'));
